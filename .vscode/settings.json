@@ -1,0 +1,15 @@
+{
+    "debug.node.autoAttach": "on",
+    "jest.debugMode": true,
+    "jest.autoEnable": false,
+    "eslint.enable": true,
+    "rest-client.previewColumn": "current",
+    "rest-client.environmentVariables": {
+        "local": {
+            "host": "http://localhost:3001"
+        }
+    },
+    "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": true
+    }
+}
