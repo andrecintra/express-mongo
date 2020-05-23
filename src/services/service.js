@@ -11,7 +11,7 @@ exports.getAll = async () => {
 
         const modelResponse = await Users.find()
 
-        if (!modelResponse || modelResponse.length) {
+        if (!modelResponse || !modelResponse.length) {
 
             throw new ErrorModel(Constants.ERROR_MESSAGE.USER_NOT_FOUND, Constants.HTTP_CODE.NOT_FOUND);
 
@@ -59,19 +59,50 @@ exports.create = async (body) => {
 
         const modelResponse = await Users.create(userToSave)
 
-        if (!modelResponse) {
-
-            throw new ErrorModel(Constants.ERROR_MESSAGE.USER_NOT_FOUND, Constants.HTTP_CODE.NOT_FOUND);
-
-        }
-
         return UserDTO.fromJson(modelResponse);
 
     } catch (error) {
 
         console.error(error)
 
-        throw error;
+        throw new ErrorModel(error.message, Constants.HTTP_CODE.BAD_REQUEST);
+
+    }
+
+}
+
+exports.deleteByDocument = async (document) => {
+
+    try {
+
+        await Users.deleteOne({ "document": document }) 
+
+    } catch (error) {
+
+        console.error(error)
+
+        throw new ErrorModel(error.message, Constants.HTTP_CODE.INTERNAL_SERVER_ERROR);
+
+    }
+
+}
+
+exports.updateByDocument = async (document, body) => {
+
+    try {
+
+        const userToUpdate = UserDTO.fromJson(body)
+
+        await Users.findOneAndUpdate({ "document": document }, userToUpdate)
+
+        return userToUpdate;
+
+    } catch (error) {
+
+        console.error(error)
+
+        throw new ErrorModel(error.message, Constants.HTTP_CODE.BAD_REQUEST);
+
     }
 
 }

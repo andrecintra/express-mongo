@@ -4,9 +4,9 @@ const ErrorModel = require("../models/object/errorModel")
 const Constants = require("../util/constants")
 const Service = require("../services/service")
 
-const validatePayloadFields = (body, requiredFields) => {
+const validateCreatePayloadFields = (body, requiredFields) => {
 
-    for (key of requiredFields) {
+    for (const key of requiredFields) {
 
         if (!body[key]) {
 
@@ -15,6 +15,15 @@ const validatePayloadFields = (body, requiredFields) => {
         }
     }
 
+}
+
+const validatePatchPayloadFields = (body, requiredFields) => {
+
+    const isInRequired = Object.keys(body).some(field => !requiredFields.includes(field));
+
+    const isValueNull = Object.values(body).some(value => !value);
+
+    return isInRequired && isValueNull;
 }
 
 exports.getAll = async () => {
@@ -36,13 +45,13 @@ exports.getByDocument = async (request) => {
 
     try {
 
-        if (!request && !request.document) {
+        if (!request && !request.params && !request.params.document) {
 
             throw new ErrorModel(Constants.ERROR_MESSAGE.DOCUMENT_REQUIRED, Constants.HTTP_CODE.BAD_REQUEST);
 
         }
 
-        return await Service.getByDocument(request.document);
+        return await Service.getByDocument(request.params.document);
 
     } catch (error) {
 
@@ -65,9 +74,61 @@ exports.createUser = async (request) => {
 
         const requiredFields = ["document", "name", "password"];
 
-        validatePayloadFields(request.body, requiredFields);
+        validateCreatePayloadFields(request.body, requiredFields);
 
         return await Service.create(request.body);
+
+    } catch (error) {
+
+        console.error(error)
+
+        throw error;
+    }
+
+}
+
+exports.deleteByDocument = async (request) => {
+
+    try {
+
+        if (!request && !request.params && !request.params.document) {
+
+            throw new ErrorModel(Constants.ERROR_MESSAGE.DOCUMENT_REQUIRED, Constants.HTTP_CODE.BAD_REQUEST);
+
+        }
+
+        await Service.deleteByDocument(request.params.document);
+
+    } catch (error) {
+
+        console.error(error)
+
+        throw error;
+    }
+
+}
+
+exports.updateUser = async (request) => {
+
+    try {
+
+        if (!request && !request.body) {
+
+            throw new ErrorModel(Constants.ERROR_MESSAGE.BODY_REQUIRED, Constants.HTTP_CODE.BAD_REQUEST);
+
+        }
+
+        if (!request && !request.params && !request.params.document) {
+
+            throw new ErrorModel(Constants.ERROR_MESSAGE.DOCUMENT_REQUIRED, Constants.HTTP_CODE.BAD_REQUEST);
+
+        }
+
+        const requiredFields = ["document", "name", "password"];
+
+        validatePatchPayloadFields(request.body, requiredFields);
+
+        return await Service.updateByDocument(request.params.document, request.body);
 
     } catch (error) {
 

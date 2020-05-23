@@ -2,17 +2,17 @@
 
 class UserDTO {
 
-    constructor(user) {
+    constructor(document, name, password) {
 
-        this.document = user.document,
-        this.name = user.name,
-        this.password = user.password
+        this.document = document,
+        this.name = name,
+        this.password = password
 
     }
 
     static fromJson(json) {
 
-        return new AdminDTO(json.document, json.name, json.password);
+        return new UserDTO(json.document, json.name, json.password);
 
     }
 
