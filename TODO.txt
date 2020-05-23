@@ -7,5 +7,7 @@ Criar os outros verbs
  - Get one Product by id
 
 Autenticação (ver no curso como faz)
+Adicionar o .env e colocar os campos obrigatorios la
 Jest
 Tentar colocar em um docker container
+colcaor comentários

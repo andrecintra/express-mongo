@@ -2,7 +2,10 @@
 
 module.exports = {
     "ERROR_MESSAGE": {
+        "BODY_REQUIRED": "É necessário um payload de entrada",
+        "PAYLOAD_FIELD_REQUIRED": "O campo |field| é obrigatório",
         "DOCUMENT_REQUIRED": "O campo 'document' é obrigatório",
+        "PATH_PARAMETER_REQUIRED": "Paramêtro de URL é obrigatório",
         "USER_NOT_FOUND": "Nenhum usuário foi encontrado"
     },
     "HTTP_CODE": {

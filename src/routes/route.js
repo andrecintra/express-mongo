@@ -16,8 +16,8 @@ exports.handler = () => {
 
             try {
 
-                const users = await Controller.getAll()
-                res.send(users)
+                const users = await Controller.getAll();
+                res.send(users);
 
             } catch (error) {
 
@@ -25,6 +25,34 @@ exports.handler = () => {
             
             }
 
+        });
+
+        router.get("/user/:document", async (req, res) => {
+
+            try {
+
+                const user = await Controller.getByDocument(req);
+                res.send(users);
+
+            } catch (error) {
+                
+                errorHandler(res, error);
+
+            }
+        })
+
+        router.post("/user", async (req, res) => {
+
+            try {
+
+                const user = await Controller.getByDocument(req);
+                res.send(users);
+
+            } catch (error) {
+                
+                errorHandler(res, error);
+
+            }
         })
 
     return router;
