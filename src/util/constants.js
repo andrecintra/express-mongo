@@ -6,7 +6,8 @@ module.exports = {
         "PAYLOAD_FIELD_REQUIRED": "O campo |field| é obrigatório",
         "DOCUMENT_REQUIRED": "O campo 'document' é obrigatório",
         "PATH_PARAMETER_REQUIRED": "Paramêtro de URL é obrigatório",
-        "USER_NOT_FOUND": "Nenhum usuário foi encontrado"
+        "USER_NOT_FOUND": "Nenhum usuário foi encontrado",
+        "LOGIN_ERROR": "Existe um erro com o seu login. Verificar usuario ou senha."
     },
     "HTTP_CODE": {
         "OK": 200,

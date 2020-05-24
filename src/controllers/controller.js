@@ -45,7 +45,7 @@ exports.getByDocument = async (request) => {
 
     try {
 
-        if (!request && !request.params && !request.params.document) {
+        if (!request || !request.params || !request.params.document) {
 
             throw new ErrorModel(Constants.ERROR_MESSAGE.DOCUMENT_REQUIRED, Constants.HTTP_CODE.BAD_REQUEST);
 
@@ -66,7 +66,7 @@ exports.createUser = async (request) => {
 
     try {
 
-        if (!request && !request.body) {
+        if (!request || !request.body) {
 
             throw new ErrorModel(Constants.ERROR_MESSAGE.BODY_REQUIRED, Constants.HTTP_CODE.BAD_REQUEST);
 
@@ -91,7 +91,7 @@ exports.deleteByDocument = async (request) => {
 
     try {
 
-        if (!request && !request.params && !request.params.document) {
+        if (!request || !request.params || !request.params.document) {
 
             throw new ErrorModel(Constants.ERROR_MESSAGE.DOCUMENT_REQUIRED, Constants.HTTP_CODE.BAD_REQUEST);
 
@@ -112,13 +112,13 @@ exports.updateUser = async (request) => {
 
     try {
 
-        if (!request && !request.body) {
+        if (!request || !request.body) {
 
             throw new ErrorModel(Constants.ERROR_MESSAGE.BODY_REQUIRED, Constants.HTTP_CODE.BAD_REQUEST);
 
         }
 
-        if (!request && !request.params && !request.params.document) {
+        if (!request.params || !request.params.document) {
 
             throw new ErrorModel(Constants.ERROR_MESSAGE.DOCUMENT_REQUIRED, Constants.HTTP_CODE.BAD_REQUEST);
 
@@ -129,6 +129,27 @@ exports.updateUser = async (request) => {
         validatePatchPayloadFields(request.body, requiredFields);
 
         return await Service.updateByDocument(request.params.document, request.body);
+
+    } catch (error) {
+
+        console.error(error)
+
+        throw error;
+    }
+
+}
+
+exports.login = async (request) => {
+
+    try {
+
+        if (!request || !request.body || !request.body.document || !request.body.password) {
+
+            throw new ErrorModel(Constants.ERROR_MESSAGE.LOGIN_ERROR, Constants.HTTP_CODE.UNAUTHORIZED);
+
+        }
+
+        return await Service.login(request.body.document, request.body.password);
 
     } catch (error) {
 

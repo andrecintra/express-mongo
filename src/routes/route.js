@@ -88,6 +88,22 @@ exports.handler = () => {
             }
         })
 
+        router.post("/user/login", async (req, res) => {
+
+            try {
+
+                const user = await Controller.login(req)
+                res.status(Constants.HTTP_CODE.OK)
+                res.send(user);
+
+            } catch (error) {
+                
+                errorHandler(res, error);
+
+            }
+        })
+
+
     return router;
 }
 

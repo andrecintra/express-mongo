@@ -4,6 +4,7 @@ const Users = require("../models/db/user")
 const UserDTO = require("../models/dto/userDto")
 const ErrorModel = require("../models/object/errorModel")
 const Constants = require("../util/constants")
+const bcrypt = require("bcrypt")
 
 exports.getAll = async () => {
 
@@ -32,7 +33,7 @@ exports.getByDocument = async (document) => {
 
     try {
 
-        const modelResponse = await Users.findOne({ "document": document })
+        const modelResponse = await Users.findOne({ document })
 
         if (!modelResponse) {
 
@@ -91,17 +92,49 @@ exports.updateByDocument = async (document, body) => {
 
     try {
 
-        const userToUpdate = UserDTO.fromJson(body)
+        const updates = Object.keys(body);
 
-        await Users.findOneAndUpdate({ "document": document }, userToUpdate)
+        const user = await Users.findOne({ document })
 
-        return userToUpdate;
+        updates.forEach((update) => user[update] = body[update]);
+
+        const updatedUser = await user.save();
+
+        return UserDTO.fromJson(updatedUser);
 
     } catch (error) {
 
         console.error(error)
 
         throw new ErrorModel(error.message, Constants.HTTP_CODE.BAD_REQUEST);
+
+    }
+
+}
+
+exports.login = async (document, password) => {
+
+    try {
+
+        const modelResponse = await Users.findOne({ document })
+
+        if (!modelResponse){
+            throw new ErrorModel(Constants.ERROR_MESSAGE.LOGIN_ERROR, Constants.HTTP_CODE.UNAUTHORIZED);
+        }
+
+        const isValid = await bcrypt.compare(password, modelResponse.password);
+
+        if (!isValid) {
+            throw new ErrorModel(Constants.ERROR_MESSAGE.LOGIN_ERROR, Constants.HTTP_CODE.UNAUTHORIZED);
+        }
+
+        return true;
+
+    } catch (error) {
+
+        console.error(error)
+
+        throw error
 
     }
 
