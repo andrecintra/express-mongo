@@ -1,161 +1,167 @@
-"use strict"
+'use strict';
 
-const ErrorModel = require("../models/object/errorModel")
-const Constants = require("../util/constants")
-const Service = require("../services/service")
+const ErrorModel = require('../models/object/errorModel');
+const Constants = require('../util/constants');
+const Service = require('../services/service');
 
 const validateCreatePayloadFields = (body, requiredFields) => {
 
-    for (const key of requiredFields) {
+	for (const key of requiredFields) {
 
-        if (!body[key]) {
+		if (!body[key]) {
 
-            throw new ErrorModel(Constants.ERROR_MESSAGE.PAYLOAD_FIELD_REQUIRED.replace("|field|", key), Constants.HTTP_CODE.BAD_REQUEST);
+			throw new ErrorModel(Constants.ERROR_MESSAGE.PAYLOAD_FIELD_REQUIRED.replace('|field|', key), Constants.HTTP_CODE.BAD_REQUEST);
 
-        }
-    }
+		}
+	}
 
-}
+};
 
 const validatePatchPayloadFields = (body, requiredFields) => {
 
-    const isInRequired = Object.keys(body).some(field => !requiredFields.includes(field));
+	const isInRequired = Object.keys(body).some(field => !requiredFields.includes(field));
 
-    const isValueNull = Object.values(body).some(value => !value);
+	const isValueNull = Object.values(body).some(value => !value);
 
-    return isInRequired && isValueNull;
-}
+	return isInRequired && isValueNull;
+};
 
 exports.getAll = async () => {
 
-    try {
+	try {
 
-        return await Service.getAll();
+		return await Service.getAll();
 
-    } catch (error) {
+	}
+	catch (error) {
 
-        console.error(error);
+		console.error(error);
 
-        throw error;
-    }
+		throw error;
+	}
 
-}
+};
 
 exports.getByDocument = async (request) => {
 
-    try {
+	try {
 
-        if (!request || !request.params || !request.params.document) {
+		if (!request || !request.params || !request.params.document) {
 
-            throw new ErrorModel(Constants.ERROR_MESSAGE.DOCUMENT_REQUIRED, Constants.HTTP_CODE.BAD_REQUEST);
+			throw new ErrorModel(Constants.ERROR_MESSAGE.DOCUMENT_REQUIRED, Constants.HTTP_CODE.BAD_REQUEST);
 
-        }
+		}
 
-        return await Service.getByDocument(request.params.document);
+		return await Service.getByDocument(request.params.document);
 
-    } catch (error) {
+	}
+	catch (error) {
 
-        console.error(error)
+		console.error(error);
 
-        throw error;
-    }
+		throw error;
+	}
 
-}
+};
 
 exports.createUser = async (request) => {
 
-    try {
+	try {
 
-        if (!request || !request.body) {
+		if (!request || !request.body) {
 
-            throw new ErrorModel(Constants.ERROR_MESSAGE.BODY_REQUIRED, Constants.HTTP_CODE.BAD_REQUEST);
+			throw new ErrorModel(Constants.ERROR_MESSAGE.BODY_REQUIRED, Constants.HTTP_CODE.BAD_REQUEST);
 
-        }
+		}
 
-        const requiredFields = ["document", "name", "password"];
+		const requiredFields = ['document', 'name', 'password'];
 
-        validateCreatePayloadFields(request.body, requiredFields);
+		validateCreatePayloadFields(request.body, requiredFields);
 
-        return await Service.create(request.body);
+		return await Service.create(request.body);
 
-    } catch (error) {
+	}
+	catch (error) {
 
-        console.error(error)
+		console.error(error);
 
-        throw error;
-    }
+		throw error;
+	}
 
-}
+};
 
 exports.deleteByDocument = async (request) => {
 
-    try {
+	try {
 
-        if (!request || !request.params || !request.params.document) {
+		if (!request || !request.params || !request.params.document) {
 
-            throw new ErrorModel(Constants.ERROR_MESSAGE.DOCUMENT_REQUIRED, Constants.HTTP_CODE.BAD_REQUEST);
+			throw new ErrorModel(Constants.ERROR_MESSAGE.DOCUMENT_REQUIRED, Constants.HTTP_CODE.BAD_REQUEST);
 
-        }
+		}
 
-        await Service.deleteByDocument(request.params.document);
+		await Service.deleteByDocument(request.params.document);
 
-    } catch (error) {
+	}
+	catch (error) {
 
-        console.error(error)
+		console.error(error);
 
-        throw error;
-    }
+		throw error;
+	}
 
-}
+};
 
 exports.updateUser = async (request) => {
 
-    try {
+	try {
 
-        if (!request || !request.body) {
+		if (!request || !request.body) {
 
-            throw new ErrorModel(Constants.ERROR_MESSAGE.BODY_REQUIRED, Constants.HTTP_CODE.BAD_REQUEST);
+			throw new ErrorModel(Constants.ERROR_MESSAGE.BODY_REQUIRED, Constants.HTTP_CODE.BAD_REQUEST);
 
-        }
+		}
 
-        if (!request.params || !request.params.document) {
+		if (!request.params || !request.params.document) {
 
-            throw new ErrorModel(Constants.ERROR_MESSAGE.DOCUMENT_REQUIRED, Constants.HTTP_CODE.BAD_REQUEST);
+			throw new ErrorModel(Constants.ERROR_MESSAGE.DOCUMENT_REQUIRED, Constants.HTTP_CODE.BAD_REQUEST);
 
-        }
+		}
 
-        const requiredFields = ["document", "name", "password"];
+		const requiredFields = ['document', 'name', 'password'];
 
-        validatePatchPayloadFields(request.body, requiredFields);
+		validatePatchPayloadFields(request.body, requiredFields);
 
-        return await Service.updateByDocument(request.params.document, request.body);
+		return await Service.updateByDocument(request.params.document, request.body);
 
-    } catch (error) {
+	}
+	catch (error) {
 
-        console.error(error)
+		console.error(error);
 
-        throw error;
-    }
+		throw error;
+	}
 
-}
+};
 
 exports.login = async (request) => {
 
-    try {
+	try {
 
-        if (!request || !request.body || !request.body.document || !request.body.password) {
+		if (!request || !request.body || !request.body.document || !request.body.password) {
 
-            throw new ErrorModel(Constants.ERROR_MESSAGE.LOGIN_ERROR, Constants.HTTP_CODE.UNAUTHORIZED);
+			throw new ErrorModel(Constants.ERROR_MESSAGE.LOGIN_ERROR, Constants.HTTP_CODE.UNAUTHORIZED);
 
-        }
+		}
 
-        return await Service.login(request.body.document, request.body.password);
+		return await Service.login(request.body.document, request.body.password);
 
-    } catch (error) {
+	}
+	catch (error) {
 
-        console.error(error)
+		console.error(error);
 
-        throw error;
-    }
+		throw error;
+	}
 
-}
+};

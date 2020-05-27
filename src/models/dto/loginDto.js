@@ -1,19 +1,19 @@
-"use strict";
+'use strict';
 
 class LoginDTO {
 
-    constructor(document, tokens) {
+	constructor(document, tokens) {
 
-        this.document = document,
-        this.tokens = tokens;
+		this.document = document,
+		this.tokens = tokens;
 
-    }
+	}
 
-    static fromJson(json) {
+	static fromJson(json) {
 
-        return new LoginDTO(json.document, json.tokens);
+		return new LoginDTO(json.document, json.tokens);
 
-    }
+	}
 
 }
 

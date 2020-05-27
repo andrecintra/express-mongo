@@ -1,13 +1,13 @@
-"use strict";
+'use strict';
 
 class ErrorModel {
 
-    constructor(errorMessage, code) {
+	constructor(errorMessage, code) {
 
-        this.errorMessage = errorMessage;
-        this.code = code;
+		this.errorMessage = errorMessage;
+		this.code = code;
 
-    }
+	}
 
 }
 

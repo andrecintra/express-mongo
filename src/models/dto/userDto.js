@@ -1,20 +1,20 @@
-"use strict";
+'use strict';
 
 class UserDTO {
 
-    constructor(document, name, password) {
+	constructor(document, name, password) {
 
-        this.document = document,
-        this.name = name,
-        this.password = password
+		this.document = document,
+		this.name = name,
+		this.password = password;
 
-    }
+	}
 
-    static fromJson(json) {
+	static fromJson(json) {
 
-        return new UserDTO(json.document, json.name, json.password);
+		return new UserDTO(json.document, json.name, json.password);
 
-    }
+	}
 
 }
 

@@ -1,168 +1,175 @@
-"use strict"
+'use strict';
 
-const Users = require("../models/db/user")
-const UserDTO = require("../models/dto/userDto")
-const LoginDTO = require("../models/dto/loginDto")
-const ErrorModel = require("../models/object/errorModel")
-const Constants = require("../util/constants")
-const bcrypt = require("bcrypt")
-const jwt = require("jsonwebtoken")
+const Users = require('../models/db/user');
+const UserDTO = require('../models/dto/userDto');
+const LoginDTO = require('../models/dto/loginDto');
+const ErrorModel = require('../models/object/errorModel');
+const Constants = require('../util/constants');
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
 exports.getAll = async () => {
 
-    try {
+	try {
 
-        const modelResponse = await Users.find()
+		const modelResponse = await Users.find();
 
-        if (!modelResponse || !modelResponse.length) {
+		if (!modelResponse || !modelResponse.length) {
 
-            throw new ErrorModel(Constants.ERROR_MESSAGE.USER_NOT_FOUND, Constants.HTTP_CODE.NOT_FOUND);
+			throw new ErrorModel(Constants.ERROR_MESSAGE.USER_NOT_FOUND, Constants.HTTP_CODE.NOT_FOUND);
 
-        }
+		}
 
-        return modelResponse.map((model) => UserDTO.fromJson(model));
+		return modelResponse.map((model) => UserDTO.fromJson(model));
 
-    } catch (error) {
+	}
+	catch (error) {
 
-        console.error(error)
+		console.error(error);
 
-        throw error;
-    }
+		throw error;
+	}
 
 };
 
 exports.getByDocument = async (document) => {
 
-    try {
+	try {
 
-        const modelResponse = await Users.findOne({ document })
+		const modelResponse = await Users.findOne({ document });
 
-        if (!modelResponse) {
+		if (!modelResponse) {
 
-            throw new ErrorModel(Constants.ERROR_MESSAGE.USER_NOT_FOUND, Constants.HTTP_CODE.NOT_FOUND);
+			throw new ErrorModel(Constants.ERROR_MESSAGE.USER_NOT_FOUND, Constants.HTTP_CODE.NOT_FOUND);
 
-        }
+		}
 
-        return UserDTO.fromJson(modelResponse);
+		return UserDTO.fromJson(modelResponse);
 
-    } catch (error) {
+	}
+	catch (error) {
 
-        console.error(error)
+		console.error(error);
 
-        throw error;
-    }
+		throw error;
+	}
 
-}
+};
 
 exports.getByDocumentAndToken = async (document, token) => {
 
-    try {
+	try {
 
-        const modelResponse = await Users.findOne({ "document": document , "tokens.token": token })
+		const modelResponse = await Users.findOne({ 'document': document, 'tokens.token': token });
 
-        if (!modelResponse) {
+		if (!modelResponse) {
 
-            throw new ErrorModel(Constants.ERROR_MESSAGE.USER_NOT_FOUND, Constants.HTTP_CODE.NOT_FOUND);
+			throw new ErrorModel(Constants.ERROR_MESSAGE.USER_NOT_FOUND, Constants.HTTP_CODE.NOT_FOUND);
 
-        }
+		}
 
-        return UserDTO.fromJson(modelResponse);
+		return UserDTO.fromJson(modelResponse);
 
-    } catch (error) {
+	}
+	catch (error) {
 
-        console.error(error)
+		console.error(error);
 
-        throw error;
-    }
+		throw error;
+	}
 
-}
+};
 
 exports.create = async (body) => {
 
-    try {
+	try {
 
-        const userToSave = UserDTO.fromJson(body)
+		const userToSave = UserDTO.fromJson(body);
 
-        const modelResponse = await Users.create(userToSave)
+		const modelResponse = await Users.create(userToSave);
 
-        return UserDTO.fromJson(modelResponse);
+		return UserDTO.fromJson(modelResponse);
 
-    } catch (error) {
+	}
+	catch (error) {
 
-        console.error(error)
+		console.error(error);
 
-        throw new ErrorModel(error.message, Constants.HTTP_CODE.BAD_REQUEST);
+		throw new ErrorModel(error.message, Constants.HTTP_CODE.BAD_REQUEST);
 
-    }
+	}
 
-}
+};
 
 exports.deleteByDocument = async (document) => {
 
-    try {
+	try {
 
-        await Users.deleteOne({ "document": document }) 
+		await Users.deleteOne({ 'document': document });
 
-    } catch (error) {
+	}
+	catch (error) {
 
-        console.error(error)
+		console.error(error);
 
-        throw new ErrorModel(error.message, Constants.HTTP_CODE.INTERNAL_SERVER_ERROR);
+		throw new ErrorModel(error.message, Constants.HTTP_CODE.INTERNAL_SERVER_ERROR);
 
-    }
+	}
 
-}
+};
 
 exports.updateByDocument = async (document, body) => {
 
-    try {
+	try {
 
-        const updates = Object.keys(body);
+		const updates = Object.keys(body);
 
-        const user = await Users.findOne({ document })
+		const user = await Users.findOne({ document });
 
-        updates.forEach((update) => user[update] = body[update]);
+		updates.forEach((update) => user[update] = body[update]);
 
-        const updatedUser = await user.save();
+		const updatedUser = await user.save();
 
-        return UserDTO.fromJson(updatedUser);
+		return UserDTO.fromJson(updatedUser);
 
-    } catch (error) {
+	}
+	catch (error) {
 
-        console.error(error)
+		console.error(error);
 
-        throw new ErrorModel(error.message, Constants.HTTP_CODE.BAD_REQUEST);
+		throw new ErrorModel(error.message, Constants.HTTP_CODE.BAD_REQUEST);
 
-    }
+	}
 
-}
+};
 
 exports.login = async (document, password) => {
 
-    try {
+	try {
 
-        const modelResponse = await Users.findOne({ document })
+		const modelResponse = await Users.findOne({ document });
 
-        if (!modelResponse){
-            throw new ErrorModel(Constants.ERROR_MESSAGE.LOGIN_ERROR, Constants.HTTP_CODE.UNAUTHORIZED);
-        }
+		if (!modelResponse) {
+			throw new ErrorModel(Constants.ERROR_MESSAGE.LOGIN_ERROR, Constants.HTTP_CODE.UNAUTHORIZED);
+		}
 
-        const isValid = await bcrypt.compare(password, modelResponse.password);
+		const isValid = await bcrypt.compare(password, modelResponse.password);
 
-        if (!isValid) {
-            throw new ErrorModel(Constants.ERROR_MESSAGE.LOGIN_ERROR, Constants.HTTP_CODE.UNAUTHORIZED);
-        }
+		if (!isValid) {
+			throw new ErrorModel(Constants.ERROR_MESSAGE.LOGIN_ERROR, Constants.HTTP_CODE.UNAUTHORIZED);
+		}
 
-        modelResponse.save();
+		modelResponse.save();
 
-        return new LoginDTO(modelResponse.document, modelResponse.tokens);
+		return new LoginDTO(modelResponse.document, modelResponse.tokens);
 
-    } catch (error) {
+	}
+	catch (error) {
 
-        console.error(error)
+		console.error(error);
 
-        throw error
+		throw error;
 
-    }
+	}
 
-}
+};

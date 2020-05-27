@@ -1,110 +1,116 @@
-const Controller = require("../controllers/controller")
-const express = require("express")
-const Constants = require('../util/constants')
-const auth = require("../middleware/auth")
+const Controller = require('../controllers/controller');
+const express = require('express');
+const Constants = require('../util/constants');
+const auth = require('../middleware/auth');
 
-const router = express.Router()
+const router = express.Router();
 
 const errorHandler = (res, error) => {
 
-    res.status(error.code)
-    res.send( {"error": error.errorMessage} )
-    
-}
+	res.status(error.code);
+	res.send({ 'error': error.errorMessage });
+
+};
 
 exports.handler = () => {
 
-        router.get("/users", auth, async (req, res) => {
+	router.get('/users', auth, async (req, res) => {
 
-            try {
+		try {
 
-                const users = await Controller.getAll();
-                res.status(Constants.HTTP_CODE.OK)
-                res.send(users);
+			const users = await Controller.getAll();
+			res.status(Constants.HTTP_CODE.OK);
+			res.send(users);
 
-            } catch (error) {
+		}
+		catch (error) {
 
-                errorHandler(res, error);
-            
-            }
+			errorHandler(res, error);
 
-        });
+		}
 
-        router.get("/user/:document", auth, async (req, res) => {
+	});
 
-            try {
+	router.get('/user/:document', auth, async (req, res) => {
 
-                const user = await Controller.getByDocument(req);
-                res.status(Constants.HTTP_CODE.OK)
-                res.send(user);
+		try {
 
-            } catch (error) {
-                
-                errorHandler(res, error);
+			const user = await Controller.getByDocument(req);
+			res.status(Constants.HTTP_CODE.OK);
+			res.send(user);
 
-            }
-        })
+		}
+		catch (error) {
 
-        router.post("/user", async (req, res) => {
+			errorHandler(res, error);
 
-            try {
+		}
+	});
 
-                const user = await Controller.createUser(req);
-                res.status(Constants.HTTP_CODE.CREATED)
-                res.send(user);
+	router.post('/user', async (req, res) => {
 
-            } catch (error) {
-                
-                errorHandler(res, error);
+		try {
 
-            }
-        })
+			const user = await Controller.createUser(req);
+			res.status(Constants.HTTP_CODE.CREATED);
+			res.send(user);
 
-        router.delete("/user/:document", auth, async (req, res) => {
+		}
+		catch (error) {
 
-            try {
+			errorHandler(res, error);
 
-                const user = await Controller.deleteByDocument(req);
-                res.status(Constants.HTTP_CODE.NO_CONTENT).send();
+		}
+	});
 
-            } catch (error) {
-                
-                errorHandler(res, error);
+	router.delete('/user/:document', auth, async (req, res) => {
 
-            }
-        })
+		try {
 
-        router.patch("/user/:document", auth, async (req, res) => {
+			const user = await Controller.deleteByDocument(req);
+			res.status(Constants.HTTP_CODE.NO_CONTENT).send();
 
-            try {
+		}
+		catch (error) {
 
-                const user = await Controller.updateUser(req);
-                res.status(Constants.HTTP_CODE.OK)
-                res.send(user);
+			errorHandler(res, error);
 
-            } catch (error) {
-                
-                errorHandler(res, error);
+		}
+	});
 
-            }
-        })
+	router.patch('/user/:document', auth, async (req, res) => {
 
-        router.post("/user/login", async (req, res) => {
+		try {
 
-            try {
+			const user = await Controller.updateUser(req);
+			res.status(Constants.HTTP_CODE.OK);
+			res.send(user);
 
-                const user = await Controller.login(req)
-                res.status(Constants.HTTP_CODE.OK)
-                res.send(user);
+		}
+		catch (error) {
 
-            } catch (error) {
-                
-                errorHandler(res, error);
+			errorHandler(res, error);
 
-            }
-        })
+		}
+	});
+
+	router.post('/user/login', async (req, res) => {
+
+		try {
+
+			const user = await Controller.login(req);
+			res.status(Constants.HTTP_CODE.OK);
+			res.send(user);
+
+		}
+		catch (error) {
+
+			errorHandler(res, error);
+
+		}
+	});
 
 
-    return router;
-}
+	return router;
+};
 
