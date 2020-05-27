@@ -1,6 +1,7 @@
 const Controller = require("../controllers/controller")
 const express = require("express")
 const Constants = require('../util/constants')
+const auth = require("../middleware/auth")
 
 const router = express.Router()
 
@@ -13,7 +14,7 @@ const errorHandler = (res, error) => {
 
 exports.handler = () => {
 
-        router.get("/users", async (req, res) => {
+        router.get("/users", auth, async (req, res) => {
 
             try {
 
@@ -29,7 +30,7 @@ exports.handler = () => {
 
         });
 
-        router.get("/user/:document", async (req, res) => {
+        router.get("/user/:document", auth, async (req, res) => {
 
             try {
 
@@ -59,7 +60,7 @@ exports.handler = () => {
             }
         })
 
-        router.delete("/user/:document", async (req, res) => {
+        router.delete("/user/:document", auth, async (req, res) => {
 
             try {
 
@@ -73,7 +74,7 @@ exports.handler = () => {
             }
         })
 
-        router.patch("/user/:document", async (req, res) => {
+        router.patch("/user/:document", auth, async (req, res) => {
 
             try {
 

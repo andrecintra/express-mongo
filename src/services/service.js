@@ -2,9 +2,11 @@
 
 const Users = require("../models/db/user")
 const UserDTO = require("../models/dto/userDto")
+const LoginDTO = require("../models/dto/loginDto")
 const ErrorModel = require("../models/object/errorModel")
 const Constants = require("../util/constants")
 const bcrypt = require("bcrypt")
+const jwt = require("jsonwebtoken")
 
 exports.getAll = async () => {
 
@@ -34,6 +36,29 @@ exports.getByDocument = async (document) => {
     try {
 
         const modelResponse = await Users.findOne({ document })
+
+        if (!modelResponse) {
+
+            throw new ErrorModel(Constants.ERROR_MESSAGE.USER_NOT_FOUND, Constants.HTTP_CODE.NOT_FOUND);
+
+        }
+
+        return UserDTO.fromJson(modelResponse);
+
+    } catch (error) {
+
+        console.error(error)
+
+        throw error;
+    }
+
+}
+
+exports.getByDocumentAndToken = async (document, token) => {
+
+    try {
+
+        const modelResponse = await Users.findOne({ "document": document , "tokens.token": token })
 
         if (!modelResponse) {
 
@@ -128,7 +153,9 @@ exports.login = async (document, password) => {
             throw new ErrorModel(Constants.ERROR_MESSAGE.LOGIN_ERROR, Constants.HTTP_CODE.UNAUTHORIZED);
         }
 
-        return true;
+        modelResponse.save();
+
+        return new LoginDTO(modelResponse.document, modelResponse.tokens);
 
     } catch (error) {
 

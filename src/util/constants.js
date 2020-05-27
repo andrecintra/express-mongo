@@ -7,7 +7,8 @@ module.exports = {
         "DOCUMENT_REQUIRED": "O campo 'document' é obrigatório",
         "PATH_PARAMETER_REQUIRED": "Paramêtro de URL é obrigatório",
         "USER_NOT_FOUND": "Nenhum usuário foi encontrado",
-        "LOGIN_ERROR": "Existe um erro com o seu login. Verificar usuario ou senha."
+        "LOGIN_ERROR": "Existe um erro com o seu login. Verificar usuario ou senha.",
+        "USER_NOT_LOGGED": "Você precisa estar logado para executar essa requisição."
     },
     "HTTP_CODE": {
         "OK": 200,
