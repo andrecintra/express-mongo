@@ -26,11 +26,15 @@ const validatePatchPayloadFields = (body, requiredFields) => {
 	return isInRequired && isValueNull;
 };
 
-exports.getAll = async () => {
+exports.getAll = async (req) => {
 
 	try {
 
-		return await Service.getAll();
+		const limit = req.query.limit ? parseInt(req.query.limit) : 10;
+
+		const skip = req.query.skip ? parseInt(req.query.skip) : 0;
+
+		return await Service.getAll(limit, skip);
 
 	}
 	catch (error) {

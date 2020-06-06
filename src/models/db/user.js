@@ -12,6 +12,8 @@ const schema = mongoose.Schema({
 			required: true,
 		},
 	}],
+}, {
+	'timestamps': true,
 });
 
 schema.pre('save', async function(next) {

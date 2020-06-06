@@ -1,5 +1,5 @@
 
-@document=37132225847
+@document=371322258418
 @bearer-auth=Bearer {{token}}
 
 ###create user
@@ -35,7 +35,7 @@ Authorization: {{bearer-auth}}
 }
 
 ###Get All users
-GET  http://localhost:3001/v1/users HTTP/1.1
+GET  http://localhost:3001/v1/users?limit=15 HTTP/1.1
 content-type: application/json
 Authorization: {{bearer-auth}}
 

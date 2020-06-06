@@ -18,7 +18,7 @@ exports.handler = () => {
 
 		try {
 
-			const users = await Controller.getAll();
+			const users = await Controller.getAll(req);
 			res.status(Constants.HTTP_CODE.OK);
 			res.send(users);
 

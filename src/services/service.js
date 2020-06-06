@@ -6,13 +6,12 @@ const LoginDTO = require('../models/dto/loginDto');
 const ErrorModel = require('../models/object/errorModel');
 const Constants = require('../util/constants');
 const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
 
-exports.getAll = async () => {
+exports.getAll = async (limit, skip) => {
 
 	try {
 
-		const modelResponse = await Users.find();
+		const modelResponse = await Users.find().limit(limit).skip(skip);
 
 		if (!modelResponse || !modelResponse.length) {
 
