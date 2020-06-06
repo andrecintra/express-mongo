@@ -1,0 +1,51 @@
+
+@document=37132225847
+@bearer-auth=Bearer {{token}}
+
+###create user
+POST http://localhost:3001/v1/user HTTP/1.1
+content-type: application/json
+
+{
+    "document": {{document}},
+    "name": "André",
+    "password": "senha"
+}
+
+###Login
+
+# @name login
+POST http://localhost:3001/v1/user/login HTTP/1.1
+content-type: application/json
+
+{
+    "document": {{document}},
+    "password": "senha"
+}
+
+@token={{login.response.body.tokens[0].token}}
+
+###update user
+PATCH  http://localhost:3001/v1/user/{{document}} HTTP/1.1
+content-type: application/json
+Authorization: {{bearer-auth}}
+
+{
+    "name": "André Felipe Cintra"
+}
+
+###Get All users
+GET  http://localhost:3001/v1/users HTTP/1.1
+content-type: application/json
+Authorization: {{bearer-auth}}
+
+###GET user By ID
+GET  http://localhost:3001/v1/user/{{document}} HTTP/1.1
+content-type: application/json
+Authorization: {{bearer-auth}}
+
+###DELETE user By ID
+DELETE   http://localhost:3001/v1/user/{{document}} HTTP/1.1
+content-type: application/json
+Authorization: {{bearer-auth}}
+

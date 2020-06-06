@@ -67,7 +67,7 @@ exports.handler = () => {
 
 		try {
 
-			const user = await Controller.deleteByDocument(req);
+			await Controller.deleteByDocument(req);
 			res.status(Constants.HTTP_CODE.NO_CONTENT).send();
 
 		}
