@@ -2,6 +2,7 @@ const Controller = require('../controllers/controller');
 const express = require('express');
 const Constants = require('../util/constants');
 const auth = require('../middleware/auth');
+const multer = require('multer');
 
 const router = express.Router();
 
@@ -11,6 +12,10 @@ const errorHandler = (res, error) => {
 	res.send({ 'error': error.errorMessage });
 
 };
+
+const upload = multer({
+	'dest': 'avatar',
+});
 
 exports.handler = () => {
 
@@ -101,6 +106,21 @@ exports.handler = () => {
 			const user = await Controller.login(req);
 			res.status(Constants.HTTP_CODE.OK);
 			res.send(user);
+
+		}
+		catch (error) {
+
+			errorHandler(res, error);
+
+		}
+	});
+
+	router.post('/user/avatar', upload.single('avatar'), async (req, res) => {
+
+		try {
+
+			res.status(Constants.HTTP_CODE.OK);
+			res.send();
 
 		}
 		catch (error) {
