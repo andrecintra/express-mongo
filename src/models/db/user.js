@@ -23,7 +23,7 @@ schema.pre('save', async function(next) {
 		user['password'] = await bcrypt.hash(user['password'], 8);
 	}
 
-	const token = jwt.sign({ 'document': user.document.toString() }, 'jwtTokenTest');
+	const token = jwt.sign({ 'document': user.document.toString() }, process.env.JWT_KEY);
 	user['tokens'].push({ token });
 
 	next();

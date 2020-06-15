@@ -12,7 +12,7 @@ const auth = async (req, res, next) => {
 		}
 
 		const token = req.header('Authorization').replace('Bearer ', '');
-		const decoded = jwt.verify(token, 'jwtTokenTest');
+		const decoded = jwt.verify(token, process.env.JWT_KEY);
 		const user = await Service.getByDocumentAndToken(decoded.document, token);
 
 		if (!user) {

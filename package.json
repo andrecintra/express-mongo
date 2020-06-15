@@ -18,11 +18,13 @@
   },
   "scripts": {
     "lint": "eslint",
-    "start": "nodemon ./src/app.js"
+    "start": "nodemon ./src/app.js",
+    "dev": "nodemon -r dotenv/config ./src/app.js"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^3.0.0",
     "@typescript-eslint/parser": "^3.0.0",
+    "dotenv": "^8.2.0",
     "eslint": "^7.0.0",
     "eslint-config-google": "^0.14.0"
   }
